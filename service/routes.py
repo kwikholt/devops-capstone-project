@@ -68,8 +68,18 @@ def create_accounts():
 # READ AN ACCOUNT
 ######################################################################
 
-# ... place you code here to READ an account ...
+@app.route("/accounts/<id>", methods=["GET"])
+def read_account(id):
+    """
+    Reads the account with the submitted ID
+    """
+    account = Account.find(id)
+    if not account:
+        abort(status.HTTP_404_NOT_FOUND,f"Account with id [{id}] could not be found")
 
+    return make_response(account.serialize(),status.HTTP_200_OK)
+       
+    
 
 ######################################################################
 # UPDATE AN EXISTING ACCOUNT

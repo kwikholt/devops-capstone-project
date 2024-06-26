@@ -164,12 +164,24 @@ class TestAccountService(TestCase):
             content_type="application/json"
         )
         self.assertEqual(response.status_code,status.HTTP_200_OK)
+        # Get account to verify that it is updated
         response = self.client.get(
             f"{BASE_URL}/{account.id}", 
             content_type="application/json"
             )
         data = response.get_json()
         self.assertEqual(data['name'], 'abc')
+
+    def test_update_non_existing_account(self):
+        """ It shound return 404 if trying update non existing account """
+        account = AccountFactory()
+        response = self.client.put(
+            f"{BASE_URL}/1",
+            json= account.serialize(),
+            content_type="application/json"
+        )
+        self.assertEqual(response.status_code,status.HTTP_404_NOT_FOUND)
+
 
     def test_delete_accounts(self):
         """ It shound be able to delete accounts """

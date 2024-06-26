@@ -202,3 +202,15 @@ class TestAccountService(TestCase):
             )
         self.assertEqual(response.status_code,status.HTTP_404_NOT_FOUND)
     
+    def test_delete_methud_not_allowed(self):
+        """ It shound return 405 for delete methud on route without id"""
+        response = self.client.delete(
+            BASE_URL, content_type="application/json"
+            )
+        self.assertEqual(response.status_code,status.HTTP_405_METHOD_NOT_ALLOWED)
+    def test_put_methud_not_allowed(self):
+        """ It shound return 405 for put methud on route without id"""
+        response = self.client.put(
+            BASE_URL, content_type="application/json"
+            )
+        self.assertEqual(response.status_code,status.HTTP_405_METHOD_NOT_ALLOWED)

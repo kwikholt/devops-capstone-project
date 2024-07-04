@@ -63,7 +63,7 @@ def create_accounts():
 ######################################################################
 
 @app.route("/accounts", methods=["GET"])
-def list_account(id):
+def list_account():
     """
     List all accounts
     """

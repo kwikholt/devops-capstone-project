@@ -125,48 +125,47 @@ class TestAccountService(TestCase):
 
     # ADD YOUR TEST CASES HERE ...
     def test_read_an_account(self):
-       """It should be able to read an account """
-       account = self._create_accounts(1)[0]
-       response = self.client.get(
-        f"{BASE_URL}/{account.id}", content_type="application/json"
-       )
-       self.assertEqual(response.status_code,status.HTTP_200_OK)
-       data = response.get_json()
-       self.assertEqual(data["name"],account.name)
+        """It should be able to read an account """
+        account = self._create_accounts(1)[0]
+        response = self.client.get(
+            f"{BASE_URL}/{account.id}", content_type="application/json"
+            )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        data = response.get_json()
+        self.assertEqual(data["name"], account.name)
 
     def test_account_not_found(self):
         """ It should return 404 if account not found """
         response = self.client.get(
-        f"{BASE_URL}/0", content_type="application/json"
+            f"{BASE_URL}/0", content_type="application/json"
         )
-        self.assertEqual(response.status_code,status.HTTP_404_NOT_FOUND)
-    
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
     def test_list_accounts(self):
         """ It shound be able to list accounts """
         accounts = self._create_accounts(5)
         response = self.client.get(
-        BASE_URL, content_type="application/json"
+            BASE_URL, content_type="application/json"
         )
-        self.assertEqual(response.status_code,status.HTTP_200_OK)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
         data = response.get_json()
-        self.assertEqual(len(data),5)
-    
+        self.assertEqual(len(data), len(accounts))
+
     def test_update_accounts(self):
         """ It shound be able to update accounts """
         account = self._create_accounts(1)[0]
-        account_id = account.id
         self.assertNotEqual(account.name, 'abc')
         account.name = 'abc'
 
         response = self.client.put(
             f"{BASE_URL}/{account.id}",
-            json= account.serialize(),
+            json=account.serialize(),
             content_type="application/json"
         )
-        self.assertEqual(response.status_code,status.HTTP_200_OK)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
         # Get account to verify that it is updated
         response = self.client.get(
-            f"{BASE_URL}/{account.id}", 
+            f"{BASE_URL}/{account.id}",
             content_type="application/json"
             )
         data = response.get_json()
@@ -177,40 +176,40 @@ class TestAccountService(TestCase):
         account = AccountFactory()
         response = self.client.put(
             f"{BASE_URL}/1",
-            json= account.serialize(),
+            json=account.serialize(),
             content_type="application/json"
         )
-        self.assertEqual(response.status_code,status.HTTP_404_NOT_FOUND)
-
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_delete_accounts(self):
         """ It shound be able to delete accounts """
         account = self._create_accounts(1)[0]
         response = self.client.get(
-            f"{BASE_URL}/{account.id}", 
+            f"{BASE_URL}/{account.id}",
             content_type="application/json"
             )
-        self.assertEqual(response.status_code,status.HTTP_200_OK)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
         response = self.client.delete(
             f"{BASE_URL}/{account.id}",
             content_type="application/json"
         )
-        self.assertEqual(response.status_code,status.HTTP_204_NO_CONTENT)
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         response = self.client.get(
-            f"{BASE_URL}/{account.id}", 
+            f"{BASE_URL}/{account.id}",
             content_type="application/json"
             )
-        self.assertEqual(response.status_code,status.HTTP_404_NOT_FOUND)
-    
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
     def test_delete_methud_not_allowed(self):
         """ It shound return 405 for delete methud on route without id"""
         response = self.client.delete(
             BASE_URL, content_type="application/json"
             )
-        self.assertEqual(response.status_code,status.HTTP_405_METHOD_NOT_ALLOWED)
+        self.assertEqual(response.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
+
     def test_put_methud_not_allowed(self):
         """ It shound return 405 for put methud on route without id"""
         response = self.client.put(
             BASE_URL, content_type="application/json"
             )
-        self.assertEqual(response.status_code,status.HTTP_405_METHOD_NOT_ALLOWED)
+        self.assertEqual(response.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)

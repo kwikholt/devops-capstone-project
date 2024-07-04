@@ -57,20 +57,21 @@ def create_accounts():
         jsonify(message), status.HTTP_201_CREATED, {"Location": location_url}
     )
 
+
 ######################################################################
 # LIST ALL ACCOUNTS
 ######################################################################
 
 @app.route("/accounts", methods=["GET"])
-def list_accounts():
+def list_account(id):
     """
     List all accounts
     """
     accounts = Account.all()
     if not accounts:
-        return make_response([],status.HTTP_200_OK)
+        return make_response([], status.HTTP_200_OK)
     account_list = [account.serialize() for account in accounts]
-    return make_response(jsonify(account_list),status.HTTP_200_OK)    
+    return make_response(jsonify(account_list), status.HTTP_200_OK)
 
 
 ######################################################################
@@ -84,15 +85,14 @@ def read_account(id):
     """
     account = Account.find(id)
     if not account:
-        abort(status.HTTP_404_NOT_FOUND,f"Account with id [{id}] could not be found")
+        abort(status.HTTP_404_NOT_FOUND, f"Account with id [{id}] could not be found")
 
-    return make_response(account.serialize(),status.HTTP_200_OK)
-       
-    
+    return make_response(account.serialize(), status.HTTP_200_OK)
 
 ######################################################################
 # UPDATE AN EXISTING ACCOUNT
 ######################################################################
+
 
 @app.route("/accounts/<id>", methods=["PUT"])
 def update_account(id):
@@ -101,11 +101,11 @@ def update_account(id):
     """
     account = Account.find(id)
     if not account:
-        abort(status.HTTP_404_NOT_FOUND,f"Account with id [{id}] could not be found")
+        abort(status.HTTP_404_NOT_FOUND, f"Account with id [{id}] could not be found")
 
     account.deserialize(request.get_json())
     account.update()
-    return make_response(account.serialize(),status.HTTP_200_OK)
+    return make_response(account.serialize(), status.HTTP_200_OK)
 
 
 ######################################################################
@@ -119,7 +119,7 @@ def delete_account(id):
     account = Account.find(id)
     if account:
         account.delete()
-        return make_response("",status.HTTP_204_NO_CONTENT)
+        return make_response("", status.HTTP_204_NO_CONTENT)
 
 
 ######################################################################
